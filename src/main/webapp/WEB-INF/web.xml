@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         id="WebApp_ID" version="6.0">
+  
+  <display-name>TrabalhoFinal</display-name>
+  
+  <welcome-file-list>
+    <welcome-file>homepage.jsp</welcome-file>
+  </welcome-file-list>
+
+  <servlet>
+    <description></description>
+    <display-name>LoginServlet</display-name>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>controller.SearchBookServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+
+  <login-config>
+    <auth-method>FORM</auth-method>
+    <form-login-config>
+      <form-login-page>/login.jsp</form-login-page>
+      <form-error-page>/login-error.jsp</form-error-page>
+    </form-login-config>
+  </login-config>
+  
+  <session-config>
+    <session-timeout>1</session-timeout>
+    <tracking-mode>COOKIE</tracking-mode>
+  </session-config>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Pasta protegida</web-resource-name>
+      <url-pattern>/admin/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+ </security-constraint>
+  
+<security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Pasta user</web-resource-name>
+      <url-pattern>/user/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>user</role-name>
+    </auth-constraint>
+ </security-constraint>
+ 
+ <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>RequestBookServlet</web-resource-name>
+            <url-pattern>/RequestBookServlet</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+  
+  <security-role>
+    <role-name>admin</role-name>
+  </security-role>
+  
+  <security-role>
+    <role-name>user</role-name>
+  </security-role>
+</web-app>
