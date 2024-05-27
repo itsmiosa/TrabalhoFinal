@@ -144,9 +144,7 @@
                         }
                     } else {
                     %>
-                        <tr>
-                            <td colspan="8">No books available</td>
-                        </tr>
+                            <p>No books available</p>
                     <% 
                     }
                     %>

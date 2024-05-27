@@ -24,12 +24,26 @@ pageEncoding="ISO-8859-1"%>
         padding: 30px;
         text-align: center;
       }
-
+		.BackButton {
+            display: inline-block;
+            font-size: medium;
+            width: 26%;
+            color: rgb(232, 232, 232);
+            border: none;
+            border-radius: 70px;
+            text-align: center;
+            text-decoration: none;
+            background-color: rgb(34, 34, 34);
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .BackButton:hover {
+            background-color: gray;
+        }
       .Header {
         margin: 1px;
         color: rgb(34, 34, 34);
         margin-left: 10px;
-        margin-bottom: 30px;
       }
 
       .buttons {
@@ -59,15 +73,21 @@ pageEncoding="ISO-8859-1"%>
           width: 90%; /* Full width for buttons */
           font-size: 1rem; /* Adjust font size */
         }
+		.BackButton {
+        	width: 92%;
+        }
       }
     </style>
   </head>
   <body>
   <% 
-	String isbn = (String) request.getAttribute("books");
+	String isbn = (String) request.getAttribute("isbn");
+	String title = (String) request.getAttribute("title");
+	String author = (String) request.getAttribute("author");
                     %>
     <div class="container">
-      <h1 class="Header">Login error try again or create a new user</h1>
+      <h1 class="Header">You have successfully requested: <%=title%> by <%=author%></h1>
+      <a class="BackButton" href="javascript:history.back()">Request more</a>
     </div>
   </body>
 </html>

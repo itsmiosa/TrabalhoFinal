@@ -83,11 +83,14 @@ pageEncoding="ISO-8859-1"%>
       </form>
       <div class="gerir">
         <a class="buttons" href="/TrabalhoFinal/admin/manageBooks.jsp"
-          >Manage library</a
-        >
-        <a class="buttons" href="/TrabalhoFinal/admin/manageUsers.jsp"
-          >Manage users</a
-        >
+          >Manage library</a>
+        <form action="ManageUsersServlet" method="get">
+        <input class="buttons"
+          type="submit"
+          value="Manage users"
+        />
+      </form>  
+        <%-- <a class="buttons" href="/TrabalhoFinal/admin/manageUsers.jsp">Manage users</a> --%>
       </div>
     </div>
   </body>

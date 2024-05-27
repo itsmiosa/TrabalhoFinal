@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 @WebServlet("/RequestBookServlet")
 public class RequestBookServlet extends HttpServlet {
@@ -27,6 +28,7 @@ public class RequestBookServlet extends HttpServlet {
 		Connection conn = null;
 		
 		try {
+			Class.forName("org.h2.Driver");
 			conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
 
 			PreparedStatement updateBorrowedStmt = conn.prepareStatement("UPDATE book SET number_borrowed = number_borrowed + 1 WHERE isbn = ?");
@@ -41,7 +43,22 @@ public class RequestBookServlet extends HttpServlet {
             updateAvailableStmt.setString(1, isbn);
             updateAvailableStmt.executeUpdate();
 			
-			conn.close();
+            PreparedStatement getBookNameStmt = conn.prepareStatement("SELECT title, author FROM book WHERE isbn = ?");
+            getBookNameStmt.setString(1, isbn);
+            ResultSet rs = getBookNameStmt.executeQuery();
+
+            String title = null;
+            String author = null;
+            while (rs.next()) {
+                title = rs.getString("title");
+                author = rs.getString("author");
+            }
+
+            conn.close();
+
+            // Set the book name as a request attribute
+            request.setAttribute("title", title);
+            request.setAttribute("author", author);
             } catch (Exception e) {
             	e.printStackTrace();
             }

@@ -32,6 +32,7 @@ public class SearchBookServlet extends HttpServlet {
 		String query = null;
 
 		try {
+			Class.forName("org.h2.Driver");
 			conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
 			statement = conn.createStatement();
 			query = "select * from BOOK where LOWER(title) like '%" + bookQuery + "%'";
