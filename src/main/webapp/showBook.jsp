@@ -128,7 +128,7 @@
                     <%
                     if (available){
                     %>
-                    <form action="RequestBookServlet" method="get">
+                    <form action="RequestBookServlet" method="post">
        					<input type="hidden" name="isbn" value="<%= isbn %>">
                 		<input class="RequestBook" type="submit" value="Request book">
       				</form>

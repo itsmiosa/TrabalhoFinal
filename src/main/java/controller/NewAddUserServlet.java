@@ -27,6 +27,7 @@ public class NewAddUserServlet extends HttpServlet {
         PreparedStatement addUserStmt = null;
 
         String addUserSQL = "INSERT INTO PERSON (NIF, USERNAME, PASSWORD, EMAIL) VALUES (?, ?, ?, ?)";
+        
 
         try {
             Class.forName("org.h2.Driver");
@@ -42,6 +43,12 @@ public class NewAddUserServlet extends HttpServlet {
             addUserStmt.setString(4, email);
             addUserStmt.executeUpdate();
 
+            PreparedStatement updateUserRoleStmt = conn.prepareStatement("INSERT INTO user_role values (?, ?)");
+            updateUserRoleStmt.setString(1, nif);
+            updateUserRoleStmt.setString(2, "user");
+            updateUserRoleStmt.executeUpdate();
+            
+            
             // Commit the transaction
             conn.commit();
 

@@ -81,13 +81,12 @@ pageEncoding="ISO-8859-1"%>
   </head>
   <body>
   <% 
-	String isbn = (String) request.getAttribute("isbn");
 	String title = (String) request.getAttribute("title");
 	String author = (String) request.getAttribute("author");
                     %>
     <div class="container">
       <h1 class="Header">You have successfully requested: <%=title%> by <%=author%></h1>
-      <a class="BackButton" href="javascript:history.back()">Request more</a>
+      <a class="BackButton" href="SearchBookServlet?bookQuery=">Request more</a>
     </div>
   </body>
 </html>
