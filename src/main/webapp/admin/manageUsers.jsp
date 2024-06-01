@@ -9,8 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
     <style>
-          @import url("https://fonts.cdnfonts.com/css/product-sans");
-    
+        @import url("https://fonts.cdnfonts.com/css/product-sans");
         body {
             font-family: "Product Sans", sans-serif;
             background-image: url("https://static.vecteezy.com/system/resources/previews/030/639/865/non_2x/library-image-hd-free-photo.jpg");
@@ -46,7 +45,7 @@
             text-decoration: none;
             background-color: rgb(34, 34, 34);
             margin-top: 20px;
-			padding: 14px;
+            padding: 14px;
         }
         .BackButton:hover {
             background-color: gray;
@@ -102,27 +101,65 @@
             text-decoration: none;
         }
         th {
-        	text-align: center;
+            text-align: center;
         }
         .criarConta:hover {
             background-color: gray;
         }
         @media (max-width: 600px) {
+            body {
+                background-image: none;
+                background-color: white;
+            }
             .container {
                 width: auto;
-            }
-            .DeleteUser {
-                width: 100%;
+                padding: 20px;
             }
             .BackButton {
                 width: 92%;
+            }
+            table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+            }
+            table, th, td {
+                display: block;
+                width: 100%;
+            }
+            th, td {
+                box-sizing: border-box;
+                padding: 5px;
+                text-align: right;
+                position: relative;
+            }
+            th {
+                background-color: transparent;
+                color: rgb(34, 34, 34);
+                font-weight: bold;
+                text-align: left;
+                border: none;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid rgb(34, 34, 34);
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 5px;
+                font-weight: bold;
+                text-align: left;
+                background-color: rgb(245, 245, 245);
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="Header">Users registered in our library!</h1>   		
+        <h1 class="Header">Users registered in our library!</h1>
         <% 
         List<Object[]> users = (List<Object[]>) request.getAttribute("users");
         if (users != null && !users.isEmpty()) {
@@ -140,10 +177,10 @@
                 String email = (String) user[3];
             %>
             <tr>
-                <td><%= username %></td>
-                <td><%= nif %></td>
-                <td><%= email %></td>
-                <td>
+                <td data-label="Username"><%= username %></td>
+                <td data-label="NIF"><%= nif %></td>
+                <td data-label="Email"><%= email %></td>
+                <td data-label="Action">
                     <form action="ManageUsersServlet" method="post">
                         <input type="hidden" name="nif" value="<%= nif %>">
                         <input class="DeleteUser" type="submit" value="Delete user">
@@ -156,8 +193,8 @@
         <p>No users registered!</p>
         <% } %>
         <div>
-        <a class="BackButton" href="/TrabalhoFinal">Go back</a>
-        <a href="/TrabalhoFinal/createUser.jsp" class="criarConta">Create new user</a> 
+            <a class="BackButton" href="/TrabalhoFinal">Go back</a>
+            <a href="/TrabalhoFinal/createUser.jsp" class="criarConta">Create new user</a> 
         </div>
     </div>
 </body>

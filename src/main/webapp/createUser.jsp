@@ -96,7 +96,7 @@ pageEncoding="ISO-8859-1"%>
   <body>
     <div class="container">
       <h1 class="Header">Create a new user</h1>
-      <form action="searchBookServlet" method="get">
+      <form action="NewAddUserServlet" method="post">
         <input
           type="text"
           name="username"
@@ -108,7 +108,7 @@ pageEncoding="ISO-8859-1"%>
         <div class="button-container">
           <input
             type="text"
-            name="j_password"
+            name="password"
             id="password"
             placeholder="Password"
           />

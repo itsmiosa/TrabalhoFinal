@@ -16,8 +16,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/TrabalhoFinal/ManageUsersServlet")
-public class ManageUsersServlet extends HttpServlet {
+@WebServlet("/TrabalhoFinal/ManageBooksServlet")
+public class ManageBooksServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String JDBC_URL = "jdbc:h2:tcp://localhost/C:\\Users\\migue\\Desktop\\Faculdade\\Semestre 6\\SCDist\\h2-2023-09-17\\scdistdb";
 	private static final String JDBC_USER = "scdist";
@@ -26,7 +26,7 @@ public class ManageUsersServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
-		List<Object[]> users = new ArrayList<>();
+		List<Object[]> books = new ArrayList<>();
 		Connection conn = null;
 		Statement statement = null;
 		String query = null;
@@ -34,19 +34,26 @@ public class ManageUsersServlet extends HttpServlet {
 		try {
 			Class.forName("org.h2.Driver");
 			conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+			
 			statement = conn.createStatement();
-			query = "select * from PERSON";
-
+			query = "SELECT * FROM book";
+			
 			ResultSet rs = statement.executeQuery(query);
 
 			while (rs.next()) {
-				String nif = rs.getString("nif");
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				String email = rs.getString("email");
+				String isbn = rs.getString("isbn");
+				String title = rs.getString("title");
+				String author = rs.getString("author");
+				String abstractText = rs.getString("abstract");
+				String genre = rs.getString("genre");
+				boolean available = rs.getBoolean("available");
+				int numberCopies = rs.getInt("number_copies");
+				int numberBorrowed = rs.getInt("number_borrowed");
+				
+				
 
-				Object[] userData = {nif, username, password, email};
-				users.add(userData);
+				Object[] bookData = {isbn, title, author, abstractText, genre, available, numberCopies, numberBorrowed};
+				books.add(bookData);
 			}
 			rs.close();
 			statement.close();
@@ -55,22 +62,20 @@ public class ManageUsersServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		request.setAttribute("users", users);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("admin/manageUsers.jsp");
+		request.setAttribute("books", books);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("admin/manageBooks.jsp");
 		dispatcher.forward(request, response);
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nif = request.getParameter("nif");
+        String isbn = request.getParameter("isbn");
 
         Connection conn = null;
         PreparedStatement deleteRequestStmt = null;
-        PreparedStatement deleteUserRoleStmt = null;
-        PreparedStatement deletePersonStmt = null;
+        PreparedStatement deleteBookStmt = null;
 
-        String deleteRequestSQL = "DELETE FROM REQUEST WHERE nif = ?";
-        String deleteUserRoleSQL = "DELETE FROM USER_ROLE WHERE nif = ?";
-        String deletePersonSQL = "DELETE FROM PERSON WHERE nif = ?";
+        String deleteRequestSQL = "DELETE FROM REQUEST WHERE isbn = ?";
+        String deleteBookSQL = "DELETE FROM BOOK WHERE isbn = ?";
 
         try {
             Class.forName("org.h2.Driver");
@@ -81,24 +86,19 @@ public class ManageUsersServlet extends HttpServlet {
 
             // Delete from REQUEST table
             deleteRequestStmt = conn.prepareStatement(deleteRequestSQL);
-            deleteRequestStmt.setString(1, nif);
+            deleteRequestStmt.setString(1, isbn);
             deleteRequestStmt.executeUpdate();
 
-            // Delete from USER_ROLE table
-            deleteUserRoleStmt = conn.prepareStatement(deleteUserRoleSQL);
-            deleteUserRoleStmt.setString(1, nif);
-            deleteUserRoleStmt.executeUpdate();
-
-            // Delete from PERSON table
-            deletePersonStmt = conn.prepareStatement(deletePersonSQL);
-            deletePersonStmt.setString(1, nif);
-            deletePersonStmt.executeUpdate();
+            // Delete from BOOK table
+            deleteBookStmt = conn.prepareStatement(deleteBookSQL);
+            deleteBookStmt.setString(1, isbn);
+            deleteBookStmt.executeUpdate();
+            
             // Commit the transaction
             conn.commit();
 
             deleteRequestStmt.close();
-            deleteUserRoleStmt.close();
-            deletePersonStmt.close();
+            deleteBookStmt.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();

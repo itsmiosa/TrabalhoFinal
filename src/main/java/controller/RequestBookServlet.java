@@ -20,7 +20,7 @@ public class RequestBookServlet extends HttpServlet {
 	private static final String JDBC_USER = "scdist";
 	private static final String JDBC_PASSWORD = "scdist";
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 
 

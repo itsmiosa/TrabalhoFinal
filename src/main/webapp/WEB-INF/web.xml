@@ -34,7 +34,6 @@
       <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
-  
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Pasta user</web-resource-name>
@@ -44,7 +43,6 @@
       <role-name>user</role-name>
     </auth-constraint>
   </security-constraint>
-  
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>RequestBookServlet</web-resource-name>
@@ -54,7 +52,6 @@
       <role-name>user</role-name>
     </auth-constraint>
   </security-constraint>
-  
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>ManageUsersServlet</web-resource-name>
@@ -64,7 +61,24 @@
       <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
-  
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>ManageBooksServlet</web-resource-name>
+      <url-pattern>/ManageBooksServlet</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>AddBookServlet</web-resource-name>
+      <url-pattern>/AddBookServlet</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
   <security-role>
     <role-name>admin</role-name>
   </security-role>
@@ -80,5 +94,35 @@
   <servlet-mapping>
     <servlet-name>ManageUsersServlet</servlet-name>
     <url-pattern>/ManageUsersServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ManageBooksServlet</display-name>
+    <servlet-name>ManageBooksServlet</servlet-name>
+    <servlet-class>controller.ManageBooksServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageBooksServlet</servlet-name>
+    <url-pattern>/ManageBooksServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddBookServlet</display-name>
+    <servlet-name>AddBookServlet</servlet-name>
+    <servlet-class>controller.AddBookServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddBookServlet</servlet-name>
+    <url-pattern>/AddBookServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>NewAddUserServlet</display-name>
+    <servlet-name>NewAddUserServlet</servlet-name>
+    <servlet-class>controller.NewAddUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NewAddUserServlet</servlet-name>
+    <url-pattern>/NewAddUserServlet</url-pattern>
   </servlet-mapping>
 </web-app>

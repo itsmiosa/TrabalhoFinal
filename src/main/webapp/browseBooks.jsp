@@ -60,7 +60,7 @@ pageEncoding="ISO-8859-1"%>
   <body>
     <div class="loginBox">
       <h1 class="Header">Browse books</h1>
-      <form action="SearchBookServlet.java" method="get">
+      <form action="SearchBookServlet.java" method="post">
         <input
           type="text"
           name="bookQuery"
