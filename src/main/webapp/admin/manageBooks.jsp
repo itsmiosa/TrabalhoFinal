@@ -13,11 +13,8 @@
     
         body {
             font-family: "Product Sans", sans-serif;
-            background-image: url("https://static.vecteezy.com/system/resources/previews/030/639/865/non_2x/library-image-hd-free-photo.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
             background-position: center;
-            background-color: rgb(30, 21, 17);
+            background-color: white;
         }
         .DeleteBook {
             display: inline-block;

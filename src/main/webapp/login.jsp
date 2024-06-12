@@ -115,6 +115,7 @@ pageEncoding="ISO-8859-1"%>
         <a href="/TrabalhoFinal/createUser.jsp" class="criarConta"
           >Create new user</a
         >
+        
       </form>
     </div>
   </body>

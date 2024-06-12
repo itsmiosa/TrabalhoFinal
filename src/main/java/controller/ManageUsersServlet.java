@@ -61,16 +61,16 @@ public class ManageUsersServlet extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String nif = request.getParameter("nif");
+        String username = request.getParameter("username");
 
         Connection conn = null;
         PreparedStatement deleteRequestStmt = null;
         PreparedStatement deleteUserRoleStmt = null;
         PreparedStatement deletePersonStmt = null;
 
-        String deleteRequestSQL = "DELETE FROM REQUEST WHERE nif = ?";
-        String deleteUserRoleSQL = "DELETE FROM USER_ROLE WHERE nif = ?";
-        String deletePersonSQL = "DELETE FROM PERSON WHERE nif = ?";
+        String deleteRequestSQL = "DELETE FROM REQUEST WHERE username = ?";
+        String deleteUserRoleSQL = "DELETE FROM USER_ROLE WHERE username = ?";
+        String deletePersonSQL = "DELETE FROM PERSON WHERE username = ?";
 
         try {
             Class.forName("org.h2.Driver");
@@ -81,17 +81,17 @@ public class ManageUsersServlet extends HttpServlet {
 
             // Delete from REQUEST table
             deleteRequestStmt = conn.prepareStatement(deleteRequestSQL);
-            deleteRequestStmt.setString(1, nif);
+            deleteRequestStmt.setString(1, username);
             deleteRequestStmt.executeUpdate();
 
             // Delete from USER_ROLE table
             deleteUserRoleStmt = conn.prepareStatement(deleteUserRoleSQL);
-            deleteUserRoleStmt.setString(1, nif);
+            deleteUserRoleStmt.setString(1, username);
             deleteUserRoleStmt.executeUpdate();
 
             // Delete from PERSON table
             deletePersonStmt = conn.prepareStatement(deletePersonSQL);
-            deletePersonStmt.setString(1, nif);
+            deletePersonStmt.setString(1, username);
             deletePersonStmt.executeUpdate();
             // Commit the transaction
             conn.commit();

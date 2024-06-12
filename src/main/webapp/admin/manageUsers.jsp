@@ -12,11 +12,8 @@
         @import url("https://fonts.cdnfonts.com/css/product-sans");
         body {
             font-family: "Product Sans", sans-serif;
-            background-image: url("https://static.vecteezy.com/system/resources/previews/030/639/865/non_2x/library-image-hd-free-photo.jpg");
-            background-repeat: no-repeat;
-            background-size: cover;
             background-position: center;
-            background-color: rgb(30, 21, 17);
+            background-color: white;
         }
         .DeleteUser {
             display: inline-block;
@@ -182,7 +179,7 @@
                 <td data-label="Email"><%= email %></td>
                 <td data-label="Action">
                     <form action="ManageUsersServlet" method="post">
-                        <input type="hidden" name="nif" value="<%= nif %>">
+                        <input type="hidden" name="username" value="<%= username %>">
                         <input class="DeleteUser" type="submit" value="Delete user">
                     </form>
                 </td>

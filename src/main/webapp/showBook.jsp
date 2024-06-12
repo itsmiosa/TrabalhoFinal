@@ -119,6 +119,8 @@
                             int numberBorrowed = (int) book[7];
                             
                             int copiesAvailable = numberCopies - numberBorrowed;
+                            
+                            session.setAttribute("isbn", isbn);
                     %>
 				<div class="bookContainer">
                     <h1 class="bookText" ><%=title%></h1>

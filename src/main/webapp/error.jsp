@@ -3,10 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Error</title>
+    <title>Error</title>
 </head>
 <body>
-	<h1>ERROR!</h1>
+    <h1>An error occurred</h1>
+    <p>${errorMessage}</p>
+    <a href="index.jsp">Go back to homepage</a>
 </body>
 </html>

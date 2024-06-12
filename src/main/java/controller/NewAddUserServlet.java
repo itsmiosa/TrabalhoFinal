@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,6 +23,13 @@ public class NewAddUserServlet extends HttpServlet {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String nif = request.getParameter("nif");
+        
+        try {
+			password = PassHash.generateHash(password);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         Connection conn = null;
         PreparedStatement addUserStmt = null;
@@ -44,7 +52,7 @@ public class NewAddUserServlet extends HttpServlet {
             addUserStmt.executeUpdate();
 
             PreparedStatement updateUserRoleStmt = conn.prepareStatement("INSERT INTO user_role values (?, ?)");
-            updateUserRoleStmt.setString(1, nif);
+            updateUserRoleStmt.setString(1, username);
             updateUserRoleStmt.setString(2, "user");
             updateUserRoleStmt.executeUpdate();
             
