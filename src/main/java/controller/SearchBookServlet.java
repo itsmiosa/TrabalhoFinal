@@ -7,21 +7,24 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import model.*;
+
+
 import java.io.IOException;
 import java.security.Principal;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
+
+import dao.BookDAO;
 
 @WebServlet("/SearchBookServlet")
 public class SearchBookServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private static final String JDBC_URL = "jdbc:h2:tcp://localhost/C:\\Users\\migue\\Desktop\\Faculdade\\Semestre 6\\SCDist\\h2-2023-09-17\\scdistdb";
-    private static final String JDBC_USER = "scdist";
-    private static final String JDBC_PASSWORD = "scdist";
+    private BookDAO bookDAO;
+
+    @Override
+    public void init() {
+        bookDAO = new BookDAO();
+    }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookQuery = request.getParameter("bookQuery");
@@ -30,47 +33,21 @@ public class SearchBookServlet extends HttpServlet {
         Principal userPrincipal = request.getUserPrincipal();
         boolean isLoggedIn = userPrincipal != null;
 
-        List<Object[]> books = new ArrayList<>();
-        Connection conn = null;
-        Statement statement = null;
-
         try {
-            Class.forName("org.h2.Driver");
-            conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-            statement = conn.createStatement();
-            String query = "select * from BOOK where LOWER(title) like '%" + bookQuery + "%'";
+            List<Book> books = bookDAO.searchBooksByTitle(bookQuery);
+            request.setAttribute("books", books);
 
-            ResultSet rs = statement.executeQuery(query);
-
-            while (rs.next()) {
-                String isbn = rs.getString("isbn");
-                String title = rs.getString("title");
-                String author = rs.getString("author");
-                String abstractText = rs.getString("abstract");
-                String genre = rs.getString("genre");
-                boolean available = rs.getBoolean("available");
-                int numberCopies = rs.getInt("number_copies");
-                int numberBorrowed = rs.getInt("number_borrowed");
-
-                Object[] bookData = {isbn, title, author, abstractText, genre, available, numberCopies, numberBorrowed};
-                books.add(bookData);
+            // Forward to the appropriate JSP page based on login status
+            RequestDispatcher dispatcher;
+            if (isLoggedIn) {
+                dispatcher = request.getRequestDispatcher("showBook.jsp");
+            } else {
+                dispatcher = request.getRequestDispatcher("showBookNoLogin.jsp");
             }
-            rs.close();
-            statement.close();
-            conn.close();
+            dispatcher.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error searching for books");
         }
-
-        request.setAttribute("books", books);
-
-        // Forward to the appropriate JSP page based on login status
-        RequestDispatcher dispatcher;
-        if (isLoggedIn) {
-            dispatcher = request.getRequestDispatcher("showBook.jsp");
-        } else {
-            dispatcher = request.getRequestDispatcher("showBookNoLogin.jsp");
-        }
-        dispatcher.forward(request, response);
     }
 }

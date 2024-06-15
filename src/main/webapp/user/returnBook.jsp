@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Objects" %>
+<%@ page import="model.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,14 +107,14 @@
     			
         		<h1 class="Header">Requested books!</h1>        		
                     <% 
-                    List<Object[]> requests = (List<Object[]>) request.getAttribute("requests");
+                    List<BookRequest> requests = (List<BookRequest>) request.getAttribute("requests");
                     if (requests != null && !requests.isEmpty()) {
-                        for (Object[] r : requests) {
-                            String requestDate = (String) r[0];
-                            String deliveryDate = (String) r[1];
-                            String username = (String) r[2];
-                            String isbn = (String) r[3];
-                            String bookTitle = (String) r[4];
+                        for (BookRequest r : requests) {
+                            String requestDate = r.getRequestDate();
+                            String deliveryDate = r.getDeliveryDate();
+                            String username = r.getUsername();
+                            String isbn = r.getIsbn();
+                            String bookTitle = r.getBookTitle();
 
                     %>
 				<div class="bookContainer">

@@ -5,83 +5,53 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import dao.UserDAO;
+import model.*;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/TrabalhoFinal/NewAddUserServlet")
 public class NewAddUserServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final String JDBC_URL = "jdbc:h2:tcp://localhost/C:\\Users\\migue\\Desktop\\Faculdade\\Semestre 6\\SCDist\\h2-2023-09-17\\scdistdb";
-	private static final String JDBC_USER = "scdist";
-	private static final String JDBC_PASSWORD = "scdist";
+    private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String nif = request.getParameter("nif");
-        String role = null;
-        role = request.getParameter("role");
-        
-        try {
-			password = PassHash.generateHash(password);
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        Connection conn = null;
-        PreparedStatement addUserStmt = null;
-
-        String addUserSQL = "INSERT INTO PERSON (NIF, USERNAME, PASSWORD, EMAIL) VALUES (?, ?, ?, ?)";
+        String roles = request.getParameter("role");
         
 
         try {
-            Class.forName("org.h2.Driver");
-            conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-
-            // Start a transaction
-            conn.setAutoCommit(false);
-
-            addUserStmt = conn.prepareStatement(addUserSQL);
-            addUserStmt.setString(1, nif);
-            addUserStmt.setString(2, username);
-            addUserStmt.setString(3, password);
-            addUserStmt.setString(4, email);
-            addUserStmt.executeUpdate();
-
-            PreparedStatement updateUserRoleStmt = conn.prepareStatement("INSERT INTO user_role values (?, ?)");
-            
-            updateUserRoleStmt.setString(1, username);
-            updateUserRoleStmt.setString(2, "user");
-            updateUserRoleStmt.executeUpdate();
-            
-            if(role != null) {
-            	updateUserRoleStmt.setString(1, username);
-                updateUserRoleStmt.setString(2, "admin");
-                updateUserRoleStmt.executeUpdate();	
-            }
-            
-            // Commit the transaction
-            conn.commit();
-
-            addUserStmt.close();
-            conn.close();
-        } catch (Exception e) {
+            password = PassHash.generateHash(password);
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (Exception rollbackException) {
-                    rollbackException.printStackTrace();
-                }
-            }
         }
-        request.getRequestDispatcher("homepage.jsp").forward(request, response);
-    }
 
+        User user = new User(username, password, email, nif);
+        
+        List<Role> roleList = new ArrayList<>();
+        
+        Role role1 = new Role("user");
+        roleList.add(role1);
+        
+        if(roles != null) {
+        	Role role2 = new Role("admin");
+        	roleList.add(role2);
+        }
+        
+        
+        
+        UserDAO userDAO = new UserDAO();
+        try {
+            userDAO.addUserAndRoles(user, roleList);
+            request.getRequestDispatcher("homepage.jsp").forward(request, response);
+        } catch (SQLException e) {
+            e.printStackTrace();
+           
+        }
+    }
 }
- 

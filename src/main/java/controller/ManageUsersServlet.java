@@ -1,5 +1,8 @@
 package controller;
 
+import dao.UserDAO;
+import model.User;
+
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,109 +11,40 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 
 @WebServlet("/TrabalhoFinal/ManageUsersServlet")
 public class ManageUsersServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static final String JDBC_URL = "jdbc:h2:tcp://localhost/C:\\Users\\migue\\Desktop\\Faculdade\\Semestre 6\\SCDist\\h2-2023-09-17\\scdistdb";
-	private static final String JDBC_USER = "scdist";
-	private static final String JDBC_PASSWORD = "scdist";
+    private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
 
-		List<Object[]> users = new ArrayList<>();
-		Connection conn = null;
-		Statement statement = null;
-		String query = null;
-
-		try {
-			Class.forName("org.h2.Driver");
-			conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-			statement = conn.createStatement();
-			query = "select * from PERSON";
-
-			ResultSet rs = statement.executeQuery(query);
-
-			while (rs.next()) {
-				String nif = rs.getString("nif");
-				String username = rs.getString("username");
-				String password = rs.getString("password");
-				String email = rs.getString("email");
-
-				Object[] userData = {nif, username, password, email};
-				users.add(userData);
-			}
-			rs.close();
-			statement.close();
-			conn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		request.setAttribute("users", users);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("admin/manageUsers.jsp");
-		dispatcher.forward(request, response);
-	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
-
-        Connection conn = null;
-        PreparedStatement deleteRequestStmt = null;
-        PreparedStatement deleteUserRoleStmt = null;
-        PreparedStatement deletePersonStmt = null;
-
-        String deleteRequestSQL = "DELETE FROM REQUEST WHERE username = ?";
-        String deleteUserRoleSQL = "DELETE FROM USER_ROLE WHERE username = ?";
-        String deletePersonSQL = "DELETE FROM PERSON WHERE username = ?";
+        List<User> users = null;
+        UserDAO userDAO = new UserDAO();
 
         try {
-            Class.forName("org.h2.Driver");
-            conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-
-            // Start a transaction
-            conn.setAutoCommit(false);
-
-            // Delete from REQUEST table
-            deleteRequestStmt = conn.prepareStatement(deleteRequestSQL);
-            deleteRequestStmt.setString(1, username);
-            deleteRequestStmt.executeUpdate();
-
-            // Delete from USER_ROLE table
-            deleteUserRoleStmt = conn.prepareStatement(deleteUserRoleSQL);
-            deleteUserRoleStmt.setString(1, username);
-            deleteUserRoleStmt.executeUpdate();
-
-            // Delete from PERSON table
-            deletePersonStmt = conn.prepareStatement(deletePersonSQL);
-            deletePersonStmt.setString(1, username);
-            deletePersonStmt.executeUpdate();
-            // Commit the transaction
-            conn.commit();
-
-            deleteRequestStmt.close();
-            deleteUserRoleStmt.close();
-            deletePersonStmt.close();
-            conn.close();
-        } catch (Exception e) {
+            users = userDAO.getAllUsers();
+        } catch (SQLException e) {
             e.printStackTrace();
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (Exception rollbackException) {
-                    rollbackException.printStackTrace();
-                }
-            }
         }
-        // Optionally, refresh the list of users and forward back to the manage users page
-        doGet(request, response);
+
+        request.setAttribute("users", users);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/manageUsers.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+
+        UserDAO userDAO = new UserDAO();
+        try {
+            userDAO.deleteUser(username);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        doGet(request,response);
     }
 }

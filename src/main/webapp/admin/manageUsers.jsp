@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Objects" %>
+<%@ page import="model.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,7 +112,7 @@
     <div class="container">
         <h1 class="Header">Users registered in our library!</h1>
         <% 
-        List<Object[]> users = (List<Object[]>) request.getAttribute("users");
+        List<User> users = (List<User>) request.getAttribute("users");
         if (users != null && !users.isEmpty()) {
         %>
         <table>
@@ -121,10 +122,10 @@
                 <th>Email</th>
                 <th>Action</th>
             </tr>
-            <% for (Object[] user : users) {
-                String nif = (String) user[0];
-                String username = (String) user[1];
-                String email = (String) user[3];
+            <% for (User user : users) {
+                String nif = user.getNif();
+                String username = user.getUsername();
+                String email = user.getEmail();
             %>
             <tr>
                 <td data-label="Username"><%= username %></td>

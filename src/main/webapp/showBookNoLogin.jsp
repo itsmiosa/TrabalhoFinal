@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Objects" %>
+<%@ page import="model.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,17 +104,17 @@
     			
         		<h1 class="Header">Books available in our library!</h1>        		
                     <% 
-                    List<Object[]> books = (List<Object[]>) request.getAttribute("books");
+                    List<Book> books = (List<Book>) request.getAttribute("books");
                     if (books != null && !books.isEmpty()) {
-                        for (Object[] book : books) {
-                            String isbn = (String) book[0];
-                            String title = (String) book[1];
-                            String author = (String) book[2];
-                            String abstractText = (String) book[3];
-                            String genre = (String) book[4];
-                            boolean available = (boolean) book[5];
-                            int numberCopies = (int) book[6];
-                            int numberBorrowed = (int) book[7];
+                        for (Book book : books) {
+                            String isbn = book.getIsbn();
+                            String title = book.getTitle();
+                            String author = book.getAuthor();
+                            String abstractText = book.getSynopsis();
+                            String genre = book.getGenre();
+                            boolean available = book.isAvailable();
+                            int numberCopies = book.getNumberOfCopies();
+                            int numberBorrowed = book.getNumberOfBorrowed();
                             
                             int copiesAvailable = numberCopies - numberBorrowed;
                             
