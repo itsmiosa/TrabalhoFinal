@@ -79,6 +79,9 @@ input[id="bookQuery"], select {
 			<input type="text" name="bookQuery" id="bookQuery"
 				placeholder="Search by book name" />
 		</form>
+		<form action="ReturnBookServlet" method="get">
+			<input class="buttons" type="submit" value="Return books" />
+		</form>
 		<form action="ManageBooksServlet" method="get">
 			<input class="buttons" type="submit" value="Manage books" />
 		</form>

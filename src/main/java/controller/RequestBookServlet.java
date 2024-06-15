@@ -14,12 +14,13 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 @WebServlet("/RequestBookServlet")
 public class RequestBookServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
     private static final String JDBC_URL = "jdbc:h2:tcp://localhost/C:\\Users\\migue\\Desktop\\Faculdade\\Semestre 6\\SCDist\\h2-2023-09-17\\scdistdb";
     private static final String JDBC_USER = "scdist";
     private static final String JDBC_PASSWORD = "scdist";
@@ -37,6 +38,9 @@ public class RequestBookServlet extends HttpServlet {
         try {
             Class.forName("org.h2.Driver");
             conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+
+            // Begin transaction
+            conn.setAutoCommit(false);
 
             PreparedStatement updateBorrowedStmt = conn.prepareStatement("UPDATE book SET number_borrowed = number_borrowed + 1 WHERE isbn = ?");
             PreparedStatement updateAvailableStmt = conn.prepareStatement("UPDATE book SET available = CASE WHEN number_copies = number_borrowed THEN FALSE ELSE available END WHERE isbn = ?");
@@ -61,29 +65,42 @@ public class RequestBookServlet extends HttpServlet {
             updateRequestStmt.setString(4, isbn);
             updateRequestStmt.executeUpdate();
 
+            // Commit transaction
+            conn.commit();
+
+            // Retrieve book information after successful updates
             PreparedStatement getBookNameStmt = conn.prepareStatement("SELECT title, author FROM book WHERE isbn = ?");
             getBookNameStmt.setString(1, isbn);
             ResultSet rs = getBookNameStmt.executeQuery();
 
             String title = null;
             String author = null;
-            while (rs.next()) {
+            if (rs.next()) {
                 title = rs.getString("title");
                 author = rs.getString("author");
             }
 
-            // Set the book name as a request attribute
+            // Set the book name as request attributes
             request.setAttribute("title", title);
             request.setAttribute("author", author);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
+            // Rollback transaction if there's an error
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException sqlEx) {
+                    sqlEx.printStackTrace();
+                }
+            }
             // Set error message as request attribute
             request.setAttribute("errorMessage", "An error occurred: " + e.getMessage());
         } finally {
-            // Ensure the connection is closed even if an exception occurs
+            // Ensure the connection is closed and transaction is ended
             if (conn != null) {
                 try {
+                    conn.setAutoCommit(true); // Reset auto-commit mode
                     conn.close();
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -31,7 +31,7 @@
       <url-pattern>/*</url-pattern>
     </web-resource-collection>
     <user-data-constraint>
-        <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
   <security-constraint>
@@ -63,11 +63,29 @@
   </security-constraint>
   <security-constraint>
     <web-resource-collection>
+      <web-resource-name>ReturnBookServlet</web-resource-name>
+      <url-pattern>/ReturnBookServlet</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>user</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
       <web-resource-name>ManageUsersServlet</web-resource-name>
       <url-pattern>/ManageUsersServlet</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Redirect</web-resource-name>
+      <url-pattern>/Redirect</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>user</role-name>
     </auth-constraint>
   </security-constraint>
   <security-constraint>
@@ -133,5 +151,15 @@
   <servlet-mapping>
     <servlet-name>NewAddUserServlet</servlet-name>
     <url-pattern>/NewAddUserServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AddUserServlet</display-name>
+    <servlet-name>AddUserServlet</servlet-name>
+    <servlet-class>controller.AddUserServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddUserServlet</servlet-name>
+    <url-pattern>/AddUserServlet</url-pattern>
   </servlet-mapping>
 </web-app>

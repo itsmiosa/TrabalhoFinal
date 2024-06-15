@@ -103,55 +103,8 @@
         .criarConta:hover {
             background-color: gray;
         }
-        @media (max-width: 600px) {
-            body {
-                background-image: none;
-                background-color: white;
-            }
-            .container {
-                width: auto;
-                padding: 20px;
-            }
-            .BackButton {
-                width: 92%;
-            }
-            table {
-                display: block;
-                width: 100%;
-                overflow-x: auto;
-            }
-            table, th, td {
-                display: block;
-                width: 100%;
-            }
-            th, td {
-                box-sizing: border-box;
-                padding: 5px;
-                text-align: right;
-                position: relative;
-            }
-            th {
-                background-color: transparent;
-                color: rgb(34, 34, 34);
-                font-weight: bold;
-                text-align: left;
-                border: none;
-            }
-            td {
-                border: none;
-                border-bottom: 1px solid rgb(34, 34, 34);
-            }
-            td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0;
-                width: 50%;
-                padding-left: 5px;
-                font-weight: bold;
-                text-align: left;
-                background-color: rgb(245, 245, 245);
-            }
-        }
+       
+      }
     </style>
 </head>
 <body>
@@ -191,7 +144,7 @@
         <% } %>
         <div>
             <a class="BackButton" href="/TrabalhoFinal">Go back</a>
-            <a href="/TrabalhoFinal/createUser.jsp" class="criarConta">Create new user</a> 
+            <a href="/TrabalhoFinal/admin/createUserAdmin.jsp" class="criarConta">Create new user</a> 
         </div>
     </div>
 </body>

@@ -5,20 +5,19 @@ pageEncoding="ISO-8859-1"%>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <title>Create User</title>
     <style>
       @import url("https://fonts.cdnfonts.com/css/product-sans");
 
-        body {
+      body {
             font-family: "Product Sans", sans-serif;
             background-color: rgb(34, 34, 34);
         }
       .criarConta {
         display: inline-block;
         font-size: medium;
-        font-weight: bold;
-        width: 25%;
-        color: rgb(34, 34, 34);
+        width: 21%;
+        color: rgb(171, 33, 33);
         padding: 14px;
         margin: 8px;
         border: none;
@@ -27,13 +26,14 @@ pageEncoding="ISO-8859-1"%>
         text-decoration: none;
       }
       .criarConta:hover {
-        background-color: rgb(232, 232, 232);
+        background-color: rgb(229, 195, 195);
       }
       .Header {
         margin: 1px;
         color: rgb(34, 34, 34);
         margin-left: 10px;
         margin-bottom: 20px;
+        text-align: center;
       }
       .container {
         background-color: rgb(255, 255, 255);
@@ -45,7 +45,7 @@ pageEncoding="ISO-8859-1"%>
         padding: 30px;
         text-align: center;
       }
-      input[id="username"],
+      input[type="text"],
       select {
         width: 96.5%;
         padding: 12px;
@@ -57,7 +57,7 @@ pageEncoding="ISO-8859-1"%>
       }
       input[id="password"],
       select {
-        width: 72%;
+        width: 60%;
         padding: 12px;
         margin: 8px;
         display: inline-block;
@@ -68,9 +68,9 @@ pageEncoding="ISO-8859-1"%>
       input[type="submit"] {
         font-size: medium;
         font-weight: bold;
-        width: 20%;
-        background-color: rgb(34, 34, 34);
-        color: rgb(232, 232, 232);
+        width: 32%;
+        background-color: rgb(34, 34, 34);;
+        color: white;
         padding: 14px;
         margin: 8px;
         border: none;
@@ -95,27 +95,28 @@ pageEncoding="ISO-8859-1"%>
   </head>
   <body>
     <div class="container">
-      <h1 class="Header">Login</h1>
-      <form action="j_security_check" method="post">
+      <h1 class="Header">Create a new user</h1>
+      <form action="/TrabalhoFinal/NewAddUserServlet" method="post">
         <input
           type="text"
-          name="j_username"
+          name="username"
           id="username"
           placeholder="Username"
         />
+        
+        <input type="text" name="email" id="email" placeholder="Email" />
+        <input type="text" name="nif" id="nif" placeholder="NIF" />
+        <input type="checkbox" name="role" id="role">
+        <label for="role">Administrator</label>
         <div class="button-container">
           <input
-            type="password"
-            name="j_password"
+            type="text"
+            name="password"
             id="password"
             placeholder="Password"
           />
-          <input type="submit" value="Login" />
+          <input type="submit" value="Create new user" />
         </div>
-        <a href="/TrabalhoFinal/createUser.jsp" class="criarConta"
-          >Create new user</a
-        >
-        
       </form>
     </div>
   </body>

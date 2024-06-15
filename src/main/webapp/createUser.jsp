@@ -96,15 +96,17 @@ pageEncoding="ISO-8859-1"%>
   <body>
     <div class="container">
       <h1 class="Header">Create a new user</h1>
-      <form action="NewAddUserServlet" method="post">
+      <form action="AddUserServlet" method="post">
         <input
           type="text"
           name="username"
           id="username"
           placeholder="Username"
         />
+        
         <input type="text" name="email" id="email" placeholder="Email" />
         <input type="text" name="nif" id="nif" placeholder="NIF" />
+        <input type="hidden" name="role" value="0">
         <div class="button-container">
           <input
             type="text"

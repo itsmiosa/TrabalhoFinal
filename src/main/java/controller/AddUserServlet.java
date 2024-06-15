@@ -11,8 +11,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-@WebServlet("/TrabalhoFinal/NewAddUserServlet")
-public class NewAddUserServlet extends HttpServlet {
+@WebServlet("/TrabalhoFinal/AddUserServlet")
+public class AddUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String JDBC_URL = "jdbc:h2:tcp://localhost/C:\\Users\\migue\\Desktop\\Faculdade\\Semestre 6\\SCDist\\h2-2023-09-17\\scdistdb";
 	private static final String JDBC_USER = "scdist";
@@ -59,12 +59,9 @@ public class NewAddUserServlet extends HttpServlet {
             updateUserRoleStmt.setString(2, "user");
             updateUserRoleStmt.executeUpdate();
             
-            if(role != null) {
-            	updateUserRoleStmt.setString(1, username);
-                updateUserRoleStmt.setString(2, "admin");
-                updateUserRoleStmt.executeUpdate();	
-            }
-            
+            role = role.toString();
+            System.out.println(role);
+                        
             // Commit the transaction
             conn.commit();
 
